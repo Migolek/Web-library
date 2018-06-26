@@ -1,35 +1,23 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import registerServiceWorker from './registerServiceWorker';
-import { HashRouter } from 'react-router-dom';
-import './assets/styles/base.scss';
-import 'sweetalert/dist/sweetalert.css';
-import Main from './pages/Main';
-import configureStore from './config/configureStore';
-import { Provider } from 'react-redux';
+import React from "react";
+import ReactDOM from "react-dom";
+import { createBrowserHistory } from "history";
+import { Router, Route, Switch } from "react-router-dom";
 
-const store = configureStore();
-const rootElement = document.getElementById('root');
+import "assets/css/material-dashboard-react.css?v=1.3.0";
 
-const renderApp = Component => {
-  ReactDOM.render(
-    <Provider store={store}>
-      <HashRouter>
-        <Component />
-      </HashRouter>
-    </Provider>,
-    rootElement
-  );
-};
+import LoginView from './layouts/LoginView/LoginView';
+import indexRoutes from "routes/index.jsx";
 
-renderApp(Main);
+const hist = createBrowserHistory();
 
-if (module.hot) {
-  module.hot.accept('./pages/Main', () => {
-    const NextApp = require('./pages/Main').default
-    renderApp(NextApp);
-  });
-}
-
-registerServiceWorker();
-
+ReactDOM.render(
+  <Router history={hist}>
+    <Switch>
+      <Route exact path="/login" component={LoginView} />
+      {indexRoutes.map((prop, key) => {
+        return <Route path={prop.path} component={prop.component} key={key} />;
+      })}
+    </Switch>
+  </Router>,
+  document.getElementById("root")
+);
