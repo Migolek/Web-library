@@ -26,49 +26,49 @@ const dashboardRoutes = [
     component: DashboardPage
   },
   {
-    path: "/user",
+    path: "/dashboard/user",
     sidebarName: "User Profile",
     navbarName: "Profile",
     icon: Person,
     component: UserProfile
   },
   {
-    path: "/table",
+    path: "/dashboard/table",
     sidebarName: "Table List",
     navbarName: "Table List",
     icon: ContentPaste,
     component: TableList
   },
   {
-    path: "/typography",
+    path: "/dashboard/typography",
     sidebarName: "Typography",
     navbarName: "Typography",
     icon: LibraryBooks,
     component: Typography
   },
   {
-    path: "/icons",
+    path: "/dashboard/icons",
     sidebarName: "Icons",
     navbarName: "Icons",
     icon: BubbleChart,
     component: Icons
   },
   {
-    path: "/maps",
+    path: "/dashboard/maps",
     sidebarName: "Maps",
     navbarName: "Map",
     icon: LocationOn,
     component: Maps
   },
   {
-    path: "/notifications",
+    path: "/dashboard/notifications",
     sidebarName: "Notifications",
     navbarName: "Notifications",
     icon: Notifications,
     component: NotificationsPage
   },
   {
-    path: "/upgrade-to-pro",
+    path: "/dashboard/upgrade-to-pro",
     sidebarName: "Upgrade To PRO",
     navbarName: "Upgrade To PRO",
     icon: Unarchive,
