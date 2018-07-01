@@ -10,6 +10,8 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import Button from '@material-ui/core/Button';
+import ExitToApp from '@material-ui/icons/ExitToApp';
 // core components
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
 
@@ -20,7 +22,13 @@ const Sidebar = ({ ...props }) => {
   function activeRoute(routeName) {
     return props.location.pathname.indexOf(routeName) > -1 ? true : false;
   }
-  const { classes, color, logo, image, logoText, routes } = props;
+
+  const logOut = () => {
+    localStorage.clear();
+    window.location.reload();
+  }
+
+  const { classes, color, logo, image, routes } = props;
   var links = (
     <List className={classes.list}>
       {routes.map((prop, key) => {
@@ -60,15 +68,21 @@ const Sidebar = ({ ...props }) => {
           </NavLink>
         );
       })}
+      <div style={{ textAlign: 'center', position: 'absolute', bottom: '25px', left: 0, right: 0 }}>
+        <Button variant="contained" color="primary" size="large" className={classes.button} onClick={logOut}>
+          Log out  
+          <ExitToApp className={classNames(classes.rightIcon, classes.iconSmall)} />
+        </Button>
+      </div>
     </List>
   );
   var brand = (
     <div className={classes.logo}>
-      <a href="https://www.creative-tim.com" className={classes.logoLink}>
+      <a href="/dashboard" className={classes.logoLink}>
         <div className={classes.logoImage}>
           <img src={logo} alt="logo" className={classes.img} />
         </div>
-        {logoText}
+        Web Library
       </a>
     </div>
   );

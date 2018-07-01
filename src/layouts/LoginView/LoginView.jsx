@@ -74,8 +74,7 @@ class LoginView extends Component {
 
   asGuest = () => {
     localStorage.setItem('auth', true);
-    console.log(this.props);
-    this.props.history.push('/dashboard');
+    window.location.replace('/dashboard');
   }
 
   handleChange = name => event => {
