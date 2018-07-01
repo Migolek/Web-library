@@ -59,7 +59,8 @@ class LoginView extends Component {
         this.setState(() => ({ ...INITIAL_STATE }));
         console.log('autoryzowano');
         localStorage.setItem('auth', true);
-        this.props.history.replace('/dashboard');
+        this.props.history.push('/dashboard');
+        // window.location.replace('/dashboard');
       })
       .catch(error => {
         this.setState({
@@ -69,6 +70,12 @@ class LoginView extends Component {
       });
 
     event.preventDefault();
+  }
+
+  asGuest = () => {
+    localStorage.setItem('auth', true);
+    console.log(this.props);
+    this.props.history.push('/dashboard');
   }
 
   handleChange = name => event => {
@@ -120,6 +127,9 @@ class LoginView extends Component {
             <CardActions style={styles.cardActions}>
               <Button type="submit" variant="contained" color="primary" className="login-btn">
                 Sign in
+              </Button>
+              <Button variant="contained" color="secondary" className="forgotPassword-btn" onClick={this.asGuest}>
+                Guest
               </Button>
               <Button variant="contained" className="forgotPassword-btn">
                 Register
