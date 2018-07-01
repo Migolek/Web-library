@@ -17,15 +17,19 @@ import dashboardRoutes from "routes/dashboard.jsx";
 import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx";
 
 import image from "assets/img/sidebar-2.jpg";
-import logo from "assets/img/reactlogo.png";
+import logo from "assets/img/library.png";
+
+import Maps from '../../views/Maps/Maps';
+import DashboardPage from "../../views/Dashboard/Dashboard.jsx";
+import UserProfile from "../../views/UserProfile/UserProfile.jsx";
+import TableList from "../../views/TableList/TableList.jsx";
 
 const switchRoutes = (
   <Switch>
-    {dashboardRoutes.map((prop, key) => {
-      if (prop.redirect)
-        return <Redirect from={prop.path} to={prop.to} key={key} />;
-      return <Route path={prop.path} component={prop.component} key={key} />;
-    })}
+    <Route path="/dashboard/home" component={DashboardPage} />
+    <Route path="/dashboard/maps" component={Maps} />
+    <Route path="/dashboard/user" component={UserProfile} />
+    <Route path="/dashboard/table" component={TableList} />    
   </Switch>
 );
 
@@ -40,7 +44,7 @@ class App extends React.Component {
     return this.props.location.pathname !== "/maps";
   }
   componentDidMount() {
-    const auth = localStorage.getItem('auth');
+    this.props.history.push('/dashboard/home');
     if (navigator.platform.indexOf("Win") > -1) {
       const ps = new PerfectScrollbar(this.refs.mainPanel);
     }
