@@ -93,6 +93,7 @@ class FormDialog extends React.Component {
           address,
           postCode,
         }
+        localStorage.setItem('currentUserID', authUser.user.uid);
         db.doCreateUser(authUser.user.uid, userData)
           .then(response => {
             this.setState(() => ({ ...initialState }));
