@@ -6,6 +6,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import FormDialog from './SignUp';
 
 import { auth } from '../../firebase';
 import logo from "../../assets/img/library.png";
@@ -57,10 +58,8 @@ class LoginView extends Component {
     auth.doSignInWithEmailAndPassword(email, password)
       .then(authUser => {
         this.setState(() => ({ ...INITIAL_STATE }));
-        console.log('autoryzowano');
         localStorage.setItem('auth', true);
-        this.props.history.push('/dashboard');
-        // window.location.replace('/dashboard');
+        window.location.replace('/dashboard');
       })
       .catch(error => {
         this.setState({
@@ -130,11 +129,11 @@ class LoginView extends Component {
               <Button variant="contained" color="secondary" className="forgotPassword-btn" onClick={this.asGuest}>
                 Guest
               </Button>
-              <Button variant="contained" className="forgotPassword-btn">
-                Register
-              </Button>
             </CardActions>
           </form>
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+            <FormDialog />
+          </div>
         </Card>
       </div>
     );
