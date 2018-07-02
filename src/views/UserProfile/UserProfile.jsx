@@ -34,6 +34,11 @@ const styles = {
   }
 };
 
+componentDidMount() {
+  
+}
+
+
 function UserProfile(props) {
   const { classes } = props;
   return (
