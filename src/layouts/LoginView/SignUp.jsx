@@ -8,7 +8,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { auth } from '../../firebase';
+import { auth, db } from '../../firebase';
 
 const styles = theme => ({
   container: {
@@ -65,7 +65,14 @@ class FormDialog extends React.Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    const { email, password } = this.state;
+    const { 
+      name,
+      lastname,
+      email,
+      password,
+      country,
+      address,
+      postCode, } = this.state;
     if (email === '' || password === '') {
       this.setState({ error: 'Email and password cannot be empty.'});
       return false;
@@ -74,9 +81,33 @@ class FormDialog extends React.Component {
       this.setState({ error: 'Password is too short.'});
       return false;
     }
-    auth.doCreateUserWithEmailAndPassword(email, password);
+    auth.doCreateUserWithEmailAndPassword(email, password)
+      .then(authUser => {
+
+        const userData = {
+          name,
+          lastname,
+          email,
+          password,
+          country,
+          address,
+          postCode,
+        }
+        localStorage.setItem('currentUserID', authUser.user.uid);
+        db.doCreateUser(authUser.user.uid, userData)
+          .then(response => {
+            this.setState(() => ({ ...initialState }));
+          })
+          .catch(error => {
+            this.setState({error: error});
+          });
+      })
+      .catch(error => {
+        this.setState({error: error});
+      });
+    
     window.confirm('You have been successfully regitered.');
-    this.setState({ open: false, error: '' });
+    this.setState({ ...initialState });
   };
 
   render() {
@@ -134,13 +165,13 @@ class FormDialog extends React.Component {
               <TextField
                 id="country"
                 label="Country"
-                defaultValue="Poland"
+                select
                 className={classes.textField}
                 value={this.state.country}
                 onChange={this.handleChange('country')}
                 margin="normal"
               >
-                <option value="Poland">Poland</option>
+                <option value="Poland" selected>Poland</option>
                 <option value="Russia">Russia</option>
                 <option value="England">England</option>
                 <option value="China">China</option>
