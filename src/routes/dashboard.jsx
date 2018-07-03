@@ -13,7 +13,7 @@ const dashboardRoutes = [
   {
     path: "/dashboard/home",
     sidebarName: "Dashboard",
-    navbarName: "Material Dashboard",
+    navbarName: "Dashboard",
     icon: Dashboard,
     component: DashboardPage
   },
@@ -26,8 +26,8 @@ const dashboardRoutes = [
   },
   {
     path: "/dashboard/table",
-    sidebarName: "Table List",
-    navbarName: "Table List",
+    sidebarName: "Movies",
+    navbarName: "Movies",
     icon: ContentPaste,
     component: TableList
   },
