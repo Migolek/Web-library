@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import Grid from "@material-ui/core/Grid";
-import InputLabel from "@material-ui/core/InputLabel";
 import { db } from '../../firebase';
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
@@ -40,22 +39,50 @@ class UserProfile extends Component {
     super(props);
 
     this.state = {
-      currentUser: {}
+      currentUser: {},
+      newData: {}
     }
   }
   componentDidMount() {
-    db.onceGetUsers().then(snapshot => {
-        const userInfo = snapshot.val();
-        const id = localStorage.getItem('currentUserID')
-        this.setState({currentUser: userInfo[id]});
-        // this.setState(() => ({ users: snapshot.val() }))
-    });
+    this.fetchUserData();
   }
 
+  fetchUserData = () => {
+    const id = localStorage.getItem('currentUserID');
+    if (id) {
+      db.onceGetUsers().then(snapshot => {
+        const userInfo = snapshot.val();
+        
+        this.setState({
+          currentUser: userInfo[id],
+          newData: userInfo[id]
+        });
+      });
+    }
+  }
+
+  changeInputValue = name => event => {
+    let currentState = Object.assign({}, this.state.newData);
+    currentState[name] = event.target.value;
+    this.setState({
+      newData: currentState
+    });
+  };
+
+  updateUser = (id, data) => {
+    if (id) {
+      db.updateUser(id, data).then(() => {
+        this.fetchUserData();
+      });
+    } else {
+      alert('Cannot update guest user.')
+    }
+  }
   
   render() {
     const { classes } = this.props;
-    const { currentUser } = this.state;
+    const { currentUser, newData } = this.state;
+    const id = localStorage.getItem('currentUserID');
     return (
       <div>
         <Grid container>
@@ -67,38 +94,6 @@ class UserProfile extends Component {
               </CardHeader>
               <CardBody>
                 <Grid container>
-                  <GridItem xs={12} sm={12} md={5}>
-                    <CustomInput
-                      labelText="Company (disabled)"
-                      id="company-disabled"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        disabled: true
-                      }}
-                    />
-                  </GridItem>
-                  <GridItem xs={12} sm={12} md={3}>
-                    <CustomInput
-                      labelText="Username"
-                      id="username"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                    />
-                  </GridItem>
-                  <GridItem xs={12} sm={12} md={4}>
-                    <CustomInput
-                      labelText="Email address"
-                      id="email-address"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                    />
-                  </GridItem>
-                </Grid>
-                <Grid container>
                   <GridItem xs={12} sm={12} md={6}>
                     <CustomInput
                       labelText="First Name"
@@ -106,6 +101,7 @@ class UserProfile extends Component {
                       formControlProps={{
                         fullWidth: true
                       }}
+                      onChange={this.changeInputValue('name')}
                     />
                   </GridItem>
                   <GridItem xs={12} sm={12} md={6}>
@@ -115,6 +111,29 @@ class UserProfile extends Component {
                       formControlProps={{
                         fullWidth: true
                       }}
+                      onChange={this.changeInputValue('lastname')}
+                    />
+                  </GridItem>
+                </Grid>
+                <Grid container>
+                  <GridItem xs={12} sm={12} md={6}>
+                    <CustomInput
+                      labelText="Email address"
+                      id="email-address"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      onChange={this.changeInputValue('email')}
+                    />
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={6}>
+                    <CustomInput
+                      labelText="Address"
+                      id="address"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      onChange={this.changeInputValue('address')}
                     />
                   </GridItem>
                 </Grid>
@@ -126,6 +145,7 @@ class UserProfile extends Component {
                       formControlProps={{
                         fullWidth: true
                       }}
+                      onChange={this.changeInputValue('city')}
                     />
                   </GridItem>
                   <GridItem xs={12} sm={12} md={4}>
@@ -135,37 +155,23 @@ class UserProfile extends Component {
                       formControlProps={{
                         fullWidth: true
                       }}
+                      onChange={this.changeInputValue('country')}
                     />
                   </GridItem>
                   <GridItem xs={12} sm={12} md={4}>
                     <CustomInput
-                      labelText="Postal Code"
+                      labelText="Post Code"
                       id="postal-code"
                       formControlProps={{
                         fullWidth: true
                       }}
-                    />
-                  </GridItem>
-                </Grid>
-                <Grid container>
-                  <GridItem xs={12} sm={12} md={12}>
-                    <InputLabel style={{ color: "#AAAAAA" }}>About me</InputLabel>
-                    <CustomInput
-                      labelText="Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo."
-                      id="about-me"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        multiline: true,
-                        rows: 5
-                      }}
+                      onChange={this.changeInputValue('postCode')}
                     />
                   </GridItem>
                 </Grid>
               </CardBody>
               <CardFooter>
-                <Button color="primary">Update Profile</Button>
+                <Button onClick={() => this.updateUser(id, newData)} color="primary">Update Profile</Button>
               </CardFooter>
             </Card>
           </GridItem>
@@ -177,16 +183,28 @@ class UserProfile extends Component {
                 </a>
               </CardAvatar>
               <CardBody profile>
-                <h6 className={classes.cardCategory}>CEO / CO-FOUNDER</h6>
-                <h4 className={classes.cardTitle}>{currentUser.name + currentUser.lastname || 'User'}</h4>
-                <p className={classes.description}>
-                  Don't be scared of the truth because we need to restart the
-                  human foundation in truth And I love you like Kanye loves Kanye
-                  I love Rick Owens’ bed design but the back is...
+                <h4 className={classes.cardTitle}>{(currentUser.name || 'First name') + ' ' + (currentUser.lastname || 'Last name')}</h4>
+                <p className={classes.description} style={{textAlign: 'left'}}>
+                  <b>First name:</b> {currentUser.name || 'User first name'}
                 </p>
-                <Button color="primary" round>
-                  Follow
-                </Button>
+                <p className={classes.description} style={{textAlign: 'left'}}>
+                  <b>Last name:</b> {currentUser.lastname || 'User last name'}
+                </p>
+                <p className={classes.description} style={{textAlign: 'left'}}>
+                  <b> Email:</b> {currentUser.email || 'User email'}
+                </p>
+                <p className={classes.description} style={{textAlign: 'left'}}>
+                  <b>Address:</b> {currentUser.address || 'User address'}
+                </p>
+                <p className={classes.description} style={{textAlign: 'left'}}>
+                  <b>City:</b> {currentUser.city || 'User city'}
+                </p>
+                <p className={classes.description} style={{textAlign: 'left'}}>
+                  <b>Post code:</b> {currentUser.postCode || 'User post code'}
+                </p>
+                <p className={classes.description} style={{textAlign: 'left'}}>
+                  <b>Country:</b> {currentUser.country || 'User country'}
+                </p>
               </CardBody>
             </Card>
           </GridItem>

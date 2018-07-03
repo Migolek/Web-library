@@ -30,6 +30,7 @@ const initialState = {
   lastname: '',
   email: '',
   password: '',
+  city: '',
   country: '',
   address: '',
   postCode: '',
@@ -42,6 +43,7 @@ class FormDialog extends React.Component {
     lastname: '',
     email: '',
     password: '',
+    city: '',
     country: '',
     address: '',
     postCode: '',
@@ -60,7 +62,6 @@ class FormDialog extends React.Component {
 
   handleClose = () => {
     this.setState({ open: false, ...initialState });
-    console.log(this.state);
   };
 
   onSubmit = (e) => {
@@ -70,6 +71,7 @@ class FormDialog extends React.Component {
       lastname,
       email,
       password,
+      city,
       country,
       address,
       postCode, } = this.state;
@@ -88,6 +90,7 @@ class FormDialog extends React.Component {
           name,
           lastname,
           email,
+          city,
           password,
           country,
           address,
@@ -163,22 +166,14 @@ class FormDialog extends React.Component {
                 margin="normal"
               />
               <TextField
-                id="country"
-                label="Country"
-                select
+                id="city"
+                label="City"
                 className={classes.textField}
-                value={this.state.country}
-                onChange={this.handleChange('country')}
+                value={this.state.city}
+                type="text"
+                onChange={this.handleChange('city')}
                 margin="normal"
-              >
-                <option value="Poland" selected>Poland</option>
-                <option value="Russia">Russia</option>
-                <option value="England">England</option>
-                <option value="China">China</option>
-                <option value="Spain">Spain</option>
-                <option value="Norway">Norway</option>
-                <option value="USA">USA</option>
-              </TextField>
+              />
               <TextField
                 id="address"
                 label="Address"
@@ -197,6 +192,23 @@ class FormDialog extends React.Component {
                 onChange={this.handleChange('postCode')}
                 margin="normal"
               />
+              <TextField
+                id="country"
+                label="Country"
+                select
+                className={classes.textField}
+                value={this.state.country}
+                onChange={this.handleChange('country')}
+                margin="normal"
+              >
+                <option value="Poland" selected>Poland</option>
+                <option value="Russia">Russia</option>
+                <option value="England">England</option>
+                <option value="China">China</option>
+                <option value="Spain">Spain</option>
+                <option value="Norway">Norway</option>
+                <option value="USA">USA</option>
+              </TextField>
             </DialogContent>
             <div>
               <span style={{ margin: '32px', color: '#e42626', fontWeight: 500 }}>{this.state.error}</span>
@@ -206,7 +218,7 @@ class FormDialog extends React.Component {
                 Cancel
               </Button>
               <Button type="submit" color="primary">
-                Subscribe
+                Register
               </Button>
             </DialogActions>
           </form>
