@@ -56,8 +56,8 @@ class TableList extends Component {
     const movies = this.state.movies;
     const { classes } = this.props;
 
-    return movies.map(movie => (
-      <Card className={classes.card}>
+    return movies.map((movie, index) => (
+      <Card className={classes.card} key={index}>
         <div style={{
           height: '300px', 
           backgroundImage: `url('${movie.thumb_url}')`, 

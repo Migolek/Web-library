@@ -12,5 +12,15 @@ export const onceGetUsers = () =>
 export const updateUser = (id, newData) =>
   db.ref('users').child(id).update(newData);
 
+export const countUsers = () =>
+  db.ref('users').once('value').then(snapshot => {
+    return snapshot.numChildren();
+  });
+
 export const onceGetVideos = () =>
   db.ref('movies').once('value');
+
+export const countMovies = () =>
+  db.ref('movies').once('value').then(snapshot => {
+    return snapshot.numChildren();
+  });
