@@ -81,6 +81,9 @@ class TableList extends Component {
           <Typography component="p" style={{marginBottom: '10px'}}>
           <b>Aviable amount:</b> {movie.amount}
           </Typography>
+          <Typography component="p" style={{marginBottom: '10px'}}>
+          <b>Price:</b> {movie.price}zł/per week
+          </Typography>
         </CardContent>
         <CardActions>
           <Button size="small" color="primary" onClick={this.handleClickOpen}>
