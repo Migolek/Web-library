@@ -34,12 +34,22 @@ const styles = {
   }
 };
 
+const initialState = {
+  name: 'Jan',
+  lastname: 'Kowalski',
+  email: 'jan.kowalski@email.com',
+  address: 'Warszawsa 2',
+  city: 'Warszawa',
+  postCode: '44-100',
+  country: 'Polska',
+}
+
 class UserProfile extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      currentUser: {},
+      currentUser: {...initialState},
       newData: {}
     }
   }
@@ -83,6 +93,9 @@ class UserProfile extends Component {
     const { classes } = this.props;
     const { currentUser, newData } = this.state;
     const id = localStorage.getItem('currentUserID');
+    console.log('dane', currentUser);
+    console.log('dane name', currentUser.name);
+
     return (
       <div>
         <Grid container>
@@ -183,7 +196,7 @@ class UserProfile extends Component {
                 </a>
               </CardAvatar>
               <CardBody profile>
-                <h4 className={classes.cardTitle}>{(currentUser.name || 'First name') + ' ' + (currentUser.lastname || 'Last name')}</h4>
+                <h4 className={classes.cardTitle}>{currentUser.name + ' ' + currentUser.lastname}</h4>
                 <p className={classes.description} style={{textAlign: 'left'}}>
                   <b>First name:</b> {currentUser.name || 'User first name'}
                 </p>
